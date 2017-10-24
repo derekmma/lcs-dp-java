@@ -36,8 +36,6 @@ public class LCS_2Str {
 
         int m = Y.length();
         int n = Z.length();
-        // int [][][] b = lcsLength3(X, Y, Z, m, n, o);
-        // String result = printLcs3(b, X, m, n, o);
         int[][] b = lcsLength(Y, Z, m, n);
         String X1 = printLcs(b, Y, m, n);
         System.out.println("-LCS of \'" + Y + "\' and \'" + Z + "\' is: " + X1);

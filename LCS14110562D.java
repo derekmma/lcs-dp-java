@@ -18,8 +18,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class LCS14110562D {
-
     public static void main(String []args) {
+        // Get three strings from file
         String X = new String();
         String Y = new String();
         String Z = new String();
@@ -47,75 +47,49 @@ public class LCS14110562D {
         System.out.println("String Y: " + Y);
         System.out.println("String Z: " + Z);
 
+        // Get length of three sequences
         int m = X.length();
         int n = Y.length();
         int o = Z.length();
-        // int [][][] b = lcsLength3(X, Y, Z, m, n, o);
-        // System.out.println("---");
-        // String result = printLcs3(b, X, m, n, o);
-        int[][] b = lcsLength(X, Y, m, n);
-        // String X1 = printLcs(b, X, m, n);
-        // System.out.println("-LCS of \'" + X + "\' and \'"+Y+"\' is: " + X1);
-        // m = X1.length();
-        // n = Z.length();
-        // b = lcsLength(X, Z, m, n);
-        String result = printLcs(b, X, m, n);
+        // Call lcsLength3 function to calculate b table
+        int [][][] b = lcsLength3(X, Y, Z, m, n, o);
+        // Call printLcs3 function to get a LCS
+        String result = printLcs3(b, X, m, n, o);
         System.out.println("--The LCS of three strings is: " + result);
     }
 
     private static int[][][] lcsLength3(String X, String Y, String Z, int m, int n, int o){
+        // Initialize table b and c for saving direction and length of LCS
         int[][][] b = new int[m][n][o];
         int[][][] c = new int[m+1][n+1][o+1];
         // index 0 lines of x, y, z axis of this cube are initialized to 0 already
+
+        // Loop every element in the three-dimentional cube, and update tables b and c
         for (int i = 0; i < m; i++){
             for (int j = 0; j < n; j++){
                 for (int k = 0; k < o; k++){
                     if (X.charAt(i) == Y.charAt(j) && X.charAt(i) == Z.charAt(k)){
                         c[i+1][j+1][k+1] = c[i][j][k]+1;
+                        // set b table to 8 to present the direction
                         b[i][j][k] = 8;
                     }
                     else if ((c[i][j+1][k+1] >= c[i+1][j][k+1]) && (c[i][j+1][k+1] >= c[i+1][j+1][k])){
                         c[i+1][j+1][k+1] = c[i][j+1][k+1];
+                        // set b table value to 1 to indicate direction
                         b[i][j][k] = 1;
                     }
                     else if ((c[i+1][j][k+1] >= c[i][j+1][k+1]) && (c[i+1][j][k+1] >= c[i+1][j+1][k])){
                         c[i+1][j+1][k+1] = c[i+1][j][k+1];
+                        // set b table value to 1 to indicate direction
                         b[i][j][k] = 2;
                     } else {
                         c[i+1][j+1][k+1] = c[i+1][j+1][k];
+                        // set b table value to 1 to indicate direction
                         b[i][j][k] = 3;
                     }
                 }
             }
         }
-        return b;
-    }
-
-    private static int[][] lcsLength(String X, String Y, int m, int n){
-        int[][] b = new int[m][n];
-        int[][] c = new int[m + 1][n + 1];
-        // row 0 and column 0 are initialized to 0 already
-
-        for (int i = 0; i < m; i++){
-            for (int j = 0; j < n; j++){
-                if (X.charAt(i) == Y.charAt(j)){
-                    c[i+1][j+1] = c[i][j] + 1;
-                    b[i][j] = 8;
-                }
-                else if (c[i][j+1] >= c[i+1][j]){
-                    c[i+1][j+1] = c[i][j+1];
-                    b[i][j] = 1;
-                }
-                else {
-                    c[i+1][j+1] = c[i+1][j];
-                    b[i][j] = 2;
-                }
-            }
-        }
-        System.out.println("Table b for \'" + X + "\' and \'" + Y + "\': ");
-        printMatrix(b);
-        System.out.println("Table c for \'" + X + "\' and \'" + Y + "\': ");
-        printMatrix(c);
         return b;
     }
 
@@ -130,6 +104,7 @@ public class LCS14110562D {
                 z--;
             } else {
                 assert b[x][y][z] == 8;
+                // find a common character
                 sb.append(X.charAt(x));
                 x--;
                 y--;
@@ -137,30 +112,5 @@ public class LCS14110562D {
             }
         }
         return sb.reverse().toString();
-    }
-
-    private static String printLcs(int[][] b, String X, int i, int j){
-        StringBuffer sb = new StringBuffer();
-        for (int x = i-1, y = j-1; x >= 0 && y >= 0; ) {
-            if (b[x][y] == 1){
-                x--;
-            } else if (b[x][y] == 2){
-                y--;
-            } else{
-                assert b[x][y] == 8;
-                sb.append(X.charAt(x));
-                x--;
-                y--;
-            }
-        }
-        return sb.reverse().toString();
-    }
-
-    private static void printMatrix(int[][] grid) {
-        for(int r=0; r<grid.length; r++) {
-           for(int c=0; c<grid[r].length; c++)
-               System.out.print(grid[r][c] + " ");
-           System.out.println();
-        }
     }
 }
