@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 
 public class LCS14110562D {
     public static void main(String []args) {
@@ -56,6 +57,8 @@ public class LCS14110562D {
         // Call printLcs3 function to get a LCS
         String result = printLcs3(b, X, m, n, o);
         System.out.println("--The LCS of three strings is: " + result);
+        int r = result.length();
+        System.out.println("--Length of the LCS: " + r);
     }
 
     private static int[][][] lcsLength3(String X, String Y, String Z, int m, int n, int o){
